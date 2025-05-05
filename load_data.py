@@ -32,6 +32,8 @@ def get_default_secret_bit(data_name):
         return 'SEX'
     elif data_name == 'fire':
         return 'ALS Unit'
+    elif data_name == 'nist':
+        return 'F1'
     else:
         raise Exception(f'ERROR: {data_name} not configured in get_default_secret_bit')
 
@@ -88,6 +90,8 @@ def load_data(data_name, n_df, secret_bit, randomize=False, unique_quasi=False, 
         df = pd.read_csv(f'{curr_dir}/datasets/acs.csv')
     elif data_name == 'fire':
         df = pd.read_csv(f'{curr_dir}/datasets/fire.csv')
+    elif data_name == 'nist':
+        df = pd.read_csv(f'{curr_dir}/datasets/25_PracticeProblem/25_Demo_25f_OriginalData.csv') #25_Demo_50f_OriginalData.csv
     else:
         raise Exception(f'ERROR: {data_name} not configured in load_data')
     

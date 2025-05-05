@@ -35,6 +35,13 @@ def single_rep(rep, synth_model, n_rows, k, scale_type, n_queries, attack_name, 
     synth_df_dir = f'{rep_dir}/{synth_model}/{n_rows_names[n_rows]}'
     synth_result_dir = f'{synth_df_dir}/{query_subdir}_{scale_type}/'
     os.makedirs(synth_result_dir, exist_ok=True)
+    print(
+    f"rep_dir: {data_dir}/rep_{rep}\n"
+    f"query_subdir: simple/{k}way\n"
+    f"query_dir: {data_dir}/rep_{rep}/queries/simple/{k}way/\n"
+    f"synth_df_dir: {data_dir}/rep_{rep}/{synth_model}/{n_rows_names[n_rows]}\n"
+    f"synth_result_dir: {data_dir}/rep_{rep}/{synth_model}/{n_rows_names[n_rows]}/simple/{k}way_{scale_type}/"
+    )
 
     # load raw dataset and target user
     df = pd.read_csv(f'{rep_dir}/df.csv.gz', compression='gzip')
@@ -162,7 +169,7 @@ def track_progress_fn(completed_queue, total):
                 break
 
 @click.command()
-@click.option('--data_name', default='acs', type=str, help='dataset to attack (acs, fire)')
+@click.option('--data_name', default='nist', type=str, help='dataset to attack (acs, fire)')
 @click.option('--synth_model', default='BayNet_3parents', type=str, help='synthetic model to fit (BayNet_Xparents, RAP_Xiters, RAP_Xiters_NN, CTGAN, NonPrivate, Real, GaussianCopula, TVAE, CopulaGAN)')
 @click.option('--n_rows', type=int, default=1000, help='number of rows of synthetic data')
 @click.option('--k', type=int, default=3, help='k-way marginals')
@@ -173,7 +180,7 @@ def track_progress_fn(completed_queue, total):
 @click.option('--start_rep_idx', type=int, default=0, help='repetition to start running attack from')
 @click.option('--reps', type=int, default=100, help='number of repetitions to attack')
 @click.option('--n_procs', type=int, default=1, help='number of processes to use to run the attack')
-@click.option('--data_dir', type=str, default='results/', help='directory to load/save generated data to')
+@click.option('--data_dir', type=str, default='results', help='directory to load/save generated data to')
 def run_attack(data_name, synth_model, n_rows, k, scale_type, n_queries, attack_name, secret_bit,
     start_rep_idx, reps, n_procs, data_dir):
     data_dir = f'{data_dir}/{data_name}/reps'

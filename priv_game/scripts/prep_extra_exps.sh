@@ -1,10 +1,10 @@
 #!/bin/bash
 REPS=500
-N_PROCS=32
+N_PROCS=30
 DATA_DIR=results/
 
 echo "[$(date +%F_%T)] Preparing extra experiments (generating 2-way and 4-way queries)..."
-for DATA_NAME in acs fire
+for DATA_NAME in fire #acs
 do
     echo "[$(date +%F_%T)] $DATA_NAME"
     

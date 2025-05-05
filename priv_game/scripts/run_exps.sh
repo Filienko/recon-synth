@@ -1,16 +1,16 @@
 REPS=500
-N_PROCS=32
+N_PROCS=31
 DATA_DIR=results/
 
 echo "[$(date +%F_%T)] Running recon, dcr & infer attacks..."
-for DATA_NAME in acs fire
+for DATA_NAME in fire # acs
 do
     echo "[$(date +%F_%T)] $DATA_NAME"
 
-    for SYNTH_MODEL in NonPrivate RAP_2Kiters BayNet_3parents CTGAN IndHist PrivBayes_3parents_100eps PrivBayes_3parents_10eps PrivBayes_3parents_1eps RAP_2Kiters_100eps RAP_2Kiters_10eps RAP_2Kiters_1eps
+    for SYNTH_MODEL in NonPrivate # CTGAN # NonPrivate RAP_2Kiters BayNet_3parents CTGAN IndHist PrivBayes_3parents_100eps PrivBayes_3parents_10eps PrivBayes_3parents_1eps RAP_2Kiters_100eps RAP_2Kiters_10eps RAP_2Kiters_1eps
     do
         echo "[$(date +%F_%T)]  => $SYNTH_MODEL"
-        for N_ROWS in 1000000 100000 10000 1000 100 10
+        for N_ROWS in 10 # 1000000 100000 10000 1000 100 10
         do
             echo "[$(date +%F_%T)]    => $N_ROWS"
             echo "[$(date +%F_%T)]        => Sampling synthetic data..."
