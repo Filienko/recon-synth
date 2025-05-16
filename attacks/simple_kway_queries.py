@@ -4,6 +4,46 @@ Utility functions to select simple k-way marginal queries involving secret attri
 import numpy as np
 from itertools import combinations, product
 
+def get_result_simple_kway_categorical(attrs, secret_cats, queries):
+    """
+    Get result for simple k-way queries with categorical target
+    
+    Parameters
+    ----------
+    attrs: np.ndarray
+        n x d array of attributes for each user
+    secret_cats: np.ndarray
+        n array of categorical secret attribute values
+    queries: list[(list[int], list[int], int)]
+        list of queries encoded in the form (attribute ids, attribute values, target category)
+    
+    Returns
+    -------
+    n_users: np.ndarray
+        q array of number of users selected by each query (based on attrs only)
+    results: np.ndarray
+        q array of results for queries
+    """
+    # Convert queries to query matrix
+    A = simple_kway(queries, attrs)
+    n_users = np.sum(A, axis=1)
+    
+    # Get target categories from queries
+    target_cats = np.array([target_cat for (_, _, target_cat) in queries])
+    
+    # Calculate results (number of users matching both attributes and target category)
+    results = np.zeros_like(n_users, dtype=np.float64)
+    
+    for j, query in enumerate(queries):
+        _, _, target_cat = query
+        # Get indices of users selected by this query
+        selected = np.where(A[j] == 1)[0]
+        # Count those whose secret attribute equals target category
+        matching = np.sum(secret_cats[selected] == target_cat)
+        results[j] = matching
+    
+    return n_users, results
+
 def get_result_simple_kway(attrs, secret_bits, queries):
     """
     Get result for simple k-way queries
@@ -35,6 +75,45 @@ def get_result_simple_kway(attrs, secret_bits, queries):
     result = np.where(target_vals == 0, result_target0, result_target1)
 
     return n_users, result
+
+def gen_all_simple_kway_categorical(attrs, k, num_categories):
+    """
+    Generate all simple k-way marginal queries for categorical target
+    (k - 1) attributes + 1 target attribute with multiple categories
+    
+    Parameters
+    ----------
+    attrs: np.ndarray
+        n x d array of attributes for each user
+    k: int
+        total number of attributes selected by query
+    num_categories: int
+        number of possible values for the categorical attribute
+    
+    Returns
+    -------
+    queries: list[(list[int], list[int], int)]
+        list of queries encoded as (attribute ids, attribute values, target value)
+    """
+    _, d = attrs.shape
+
+    # Gather unique values for each attribute
+    uniq_vals = []
+    for attr_ind in range(d):
+        uniq_vals.append(np.unique(attrs[:, attr_ind]))
+
+    # Cycle through all combinations of attributes
+    # attributes cannot be repeated
+    queries = []
+    attr_indss = combinations(range(d), k - 1)
+    for attr_inds in attr_indss:
+        curr_uniq_vals = [uniq_vals[attr] for attr in attr_inds]
+        attr_valss = product(*curr_uniq_vals)
+        for attr_vals in attr_valss:
+            for target_val in range(1, num_categories+1):  # 1-indexed categories
+                queries.append((attr_inds, attr_vals, target_val)) 
+    
+    return queries
 
 def gen_all_simple_kway(attrs, k):
     """

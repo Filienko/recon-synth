@@ -60,6 +60,34 @@ def process_data(df, secret_bit):
 
     return attrs, secret_bits
 
+def process_data_categorical(df, secret_attr):
+    """
+    Split dataframe into attributes and categorical secret values
+    
+    Parameters
+    ----------
+    df: pd.DataFrame
+        dataframe containing all attributes including secret
+    secret_attr: str
+        name of the secret categorical attribute
+    
+    Returns
+    -------
+    attrs: np.ndarray
+        n x d array of non-secret attributes
+    secret_cats: np.ndarray
+        n array of categorical secret values
+    """
+    # Copy columns to avoid modifying original
+    cols = list(df.columns)
+    cols.remove(secret_attr)
+    
+    # Extract attributes and secret values
+    attrs = df[cols].to_numpy()
+    secret_cats = df[secret_attr].to_numpy()
+    
+    return attrs, secret_cats
+
 def load_data(data_name, n_df, secret_bit, randomize=False, unique_quasi=False, balance=False):
     """
     Load dataset as DataFrame, cleaning it (if necessary) to convert categorical attributes into numerical attributes
