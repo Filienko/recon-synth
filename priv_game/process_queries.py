@@ -48,9 +48,8 @@ def process_batch(proc_start, proc_end, rep_start, rep_end, synth_model_name, n_
         else:
             # split real dataset into attribute matrix
             attrs, _ = process_data(df, secret_bit)
-
-#        synth_df = pd.read_csv(f'{synth_df_dir}/synth_df.csv.gz', compression='gzip')
-        synth_df = pd.read_csv(f'/home/daniilf/recon-synth/datasets/25_PracticeProblem/25_Demo_25f_OriginalData.csv')
+        #synth_df = pd.read_csv(f'/home/daniilf/recon-synth/datasets/25_PracticeProblem/25_Demo_25f_OriginalData.csv')
+        synth_df = pd.read_csv(f'/home/daniilf/recon-synth/datasets/NIST_Red-Team_Problems1-24_v2/8_MST_e10_25f_QID2_AttackTargets.csv')
         if query_type == 'any':
             synth_attrs = synth_df.to_numpy()
             synth_secret_bits = np.zeros(len(synth_attrs)) # dummy vector to satisfy type

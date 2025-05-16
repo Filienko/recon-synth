@@ -5,7 +5,10 @@
 results
 imgs
 tmp
-
+*.lic
+*.save
+*.backup
+*.csv
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
 # website: http://jupyter.org/
